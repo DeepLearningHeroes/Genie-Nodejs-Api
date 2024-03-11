@@ -7,9 +7,13 @@ const jobSchema = new Schema(
     job_id: {
       type: Number,
     },
+    job_title: {
+      type: String,
+      trim: true,
+    },
     job_portal: {
       type: String,
-      required: true,
+      // required: true,
       trim: true,
     },
     job_link: {
@@ -24,6 +28,14 @@ const jobSchema = new Schema(
     job_keywords: [String],
     job_posted: {
       type: String,
+    },
+    job_company: {
+      type: String,
+      trim: true,
+    },
+    job_location: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true }
