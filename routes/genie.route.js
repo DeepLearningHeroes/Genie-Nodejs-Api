@@ -58,4 +58,13 @@ router.post("/addJobs", async (req, res) => {
   res.status(200).json({ "Job id": job._id });
 });
 
+router.post("/jobs", async (req, res) => {
+  const { resume_keywords } = req.body;
+  const job_ids = await Job.distinct("job_id", {
+    job_keywords: { $in: resume_keywords },
+  });
+  const results = await Job.find({ job_id: { $in: job_ids } });
+  res.status(200).json({ Jobs: results });
+});
+
 module.exports = router;
