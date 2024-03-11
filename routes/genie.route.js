@@ -35,6 +35,7 @@ router.post("/addJobs", async (req, res) => {
   });
 
   if (existingJob) {
+    res.status(409).json({ message: "Job already exist" });
     return;
   }
   const job = await Job.create({
