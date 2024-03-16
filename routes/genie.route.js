@@ -5,10 +5,11 @@ const Job = require("../models/job.model");
 const router = express.Router();
 
 router.post("/addUser", async (req, res) => {
-  const { name, resumeText } = req.body;
+  const { name, resumeText,resumeKeywords } = req.body;
   const user = await User.create({
     name,
     resumeText,
+    resumeKeywords
   });
 
   if (!user) {
