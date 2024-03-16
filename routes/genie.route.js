@@ -67,4 +67,9 @@ router.post("/jobs", async (req, res) => {
   res.status(200).json({ Jobs: results });
 });
 
+router.delete("/", async (req, res) => {
+  await Job.deleteMany({});
+  res.status(200).json({ message: "All jobs deleted successfully!" });
+});
+
 module.exports = router;
