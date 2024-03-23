@@ -13,7 +13,13 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
-    resumeKeywords: [String]
+    cleanResumeText: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    resumeKeywords: [String],
+    semanticKeywords: [String],
   },
   { timestamps: true }
 );
