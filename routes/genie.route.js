@@ -70,36 +70,14 @@ router.post("/jobs", async (req, res) => {
   res.status(200).json({ Jobs: results });
 });
 
-router.get("/getJobs", async (req, res) => {
-  // todo - can chain multiple keywords using 'or' operator and dissociate that here. but for now let this be
-  // example http://localhost:8080/getJobs?keywords=[javascript,python,Advanced Excel]
-  const { keywords } = req.query;
-  if (keywords.length === 0) return res.status(404).json({ Jobs: [] });
 
-  let jobs = {};
-  let curr = "";
-  let keywordArray = []
-  for (let i = 1; i < keywords.length - 1; i++) {
-    if (keywords[i] === ",") {
-      jobs[curr] = [];
-      keywordArray.push(curr);
-      curr = "";
-    } else curr += keywords[i];
-  }
-  jobs[curr] = [];
-  keywordArray.push(curr);
-  
-  for (const keyword of keywordArray) {
-    const jobsForKeyword = await Job.find({ job_keywords: keyword.trim() });
-    jobs[keyword] = jobsForKeyword;
-  }
-  
-  res.status(200).json({ Jobs: jobs });
-});
-
-router.delete("/", async (req, res) => {
-  await Job.deleteMany({});
-  res.status(200).json({ message: "All jobs deleted successfully!" });
+router.get("/keywords", async (req, res) => {
+  const uniqueValues = await Job.aggregate([
+    { $unwind: "$job_keywords" }, // Unwind the job_keyword array
+    { $group: { _id: "$job_keywords" } }, // Group by job_keyword and create distinct values
+  ]);
+  const keywords = uniqueValues.map((obj) => obj._id);
+  res.status(200).json({ "All unique keywords": keywords });
 });
 
 router.delete("/users", async (req, res) => {
