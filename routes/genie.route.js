@@ -72,4 +72,13 @@ router.delete("/", async (req, res) => {
   res.status(200).json({ message: "All jobs deleted successfully!" });
 });
 
+router.get("/keywords", async (req, res) => {
+  const uniqueValues = await Job.aggregate([
+    { $unwind: "$job_keywords" }, // Unwind the job_keyword array
+    { $group: { _id: "$job_keywords" } }, // Group by job_keyword and create distinct values
+  ]);
+  const keywords = uniqueValues.map((obj) => obj._id);
+  res.status(200).json({ "All unique keywords": keywords });
+});
+
 module.exports = router;
