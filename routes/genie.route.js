@@ -5,7 +5,13 @@ const Job = require("../models/job.model");
 const router = express.Router();
 
 router.post("/addUser", async (req, res) => {
-  const { name, resumeText,cleanResumeText, resumeKeywords,semanticKeywords } = req.body;
+  const {
+    name,
+    resumeText,
+    cleanResumeText,
+    resumeKeywords,
+    semanticKeywords,
+  } = req.body;
   const user = await User.create({
     name,
     resumeText,
@@ -70,14 +76,13 @@ router.post("/jobs", async (req, res) => {
   res.status(200).json({ Jobs: results });
 });
 
-
 router.get("/keywords", async (req, res) => {
   const uniqueValues = await Job.aggregate([
     { $unwind: "$job_keywords" }, // Unwind the job_keyword array
     { $group: { _id: "$job_keywords" } }, // Group by job_keyword and create distinct values
   ]);
   const keywords = uniqueValues.map((obj) => obj._id);
-  res.status(200).json({ "All unique keywords": keywords });
+  res.status(200).json({ keywords: keywords });
 });
 
 router.delete("/users", async (req, res) => {
